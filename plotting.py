@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
 
-def Plot2dError(data, true, ax, xlabel = True, ylabel = True, vmax = None):
-    """
+def plot_2d_err(data, true, ax, xlabel = True, ylabel = True, vmax = None):
+    '''
     Plot 2d error and print bias, rms on the plot
 
     parameters:
@@ -20,7 +20,7 @@ def Plot2dError(data, true, ax, xlabel = True, ylabel = True, vmax = None):
     return: image
         the 3rd returned object in ax.hist2d.
         for making colorbar later.
-    """
+    '''
 
     # calculate the error and make histogram
     err = data - true
@@ -55,4 +55,33 @@ def Plot2dError(data, true, ax, xlabel = True, ylabel = True, vmax = None):
              transform = ax.transAxes, ha = "left", va="center" , fontsize=12, c="b")
 
     return h[3]
+
+
+def plot_r_err_vs_r2(data, true, ax, max_r,vmax = None):
+    '''
+    Plot 2d error and print bias, rms on the plot
+
+    parameters:
+    data: array of (n,2)
+        (x,y) coordinate of reconstructed position
+    true: array of (n,2)
+        (x,y) coordinate of true position
+    ax: matplotlib axis
+        the axis to plot
+    max_r: float
+        the radius of detector
+    return: image
+        the 3rd returned object in ax.hist2d.
+        for making colorbar later.
+    '''
+
+    h = ax.hist2d(np.sum(true**2, axis = 1), np.sqrt(np.sum(data**2, axis = 1)) - np.sqrt(np.sum(true**2, axis = 1)), 
+            bins = (100,100), norm=matplotlib.colors.LogNorm(vmin=1, vmax=vmax))
     
+    ax.set_ylim((-2.5,2.5))
+    ax.axvline(max_r**2, color='black', linestyle='-', linewidth = 1.5, alpha = 1)
+    ax.axhline(0, color='black', linestyle='--', linewidth = 1.5, alpha = 0.5)
+    ax.tick_params(axis = 'x', direction = "in")
+
+    return h[3]
+
