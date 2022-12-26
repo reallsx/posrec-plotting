@@ -59,7 +59,7 @@ def plot_2d_err(data, true, ax, xlabel = True, ylabel = True, vmax = None):
 
 def plot_r_err_vs_r2(data, true, ax, max_r,vmax = None):
     '''
-    Plot 2d error and print bias, rms on the plot
+    Plot radius error (reconstructed radius - true radius) vs true radius
 
     parameters:
     data: array of (n,2)
@@ -85,3 +85,20 @@ def plot_r_err_vs_r2(data, true, ax, max_r,vmax = None):
 
     return h[3]
 
+def plot_hitpattern(data, true, ax, max_r,vmax = None):
+    '''
+    Plot top hit pattern and mark the true and reconstructed position
+
+    parameters:
+    data: array of (n,2)
+        (x,y) coordinate of reconstructed position
+    true: array of (n,2)
+        (x,y) coordinate of true position
+    ax: matplotlib axis
+        the axis to plot
+    max_r: float
+        the radius of detector
+    return: image
+        the 3rd returned object in ax.hist2d.
+        for making colorbar later.
+    '''
