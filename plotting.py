@@ -17,6 +17,7 @@ def plot_2d_err(data, true, ax, xlabel = True, ylabel = True, vmax = None):
         decide  if adding xlabel to the subplot
     ylabel: bool
         decide  if adding ylabel to the subplot
+
     return: image
         the 3rd returned object in ax.hist2d.
         for making colorbar later.
@@ -70,6 +71,7 @@ def plot_r_err_vs_r2(data, true, ax, max_r,vmax = None):
         the axis to plot
     max_r: float
         the radius of detector
+
     return: image
         the 3rd returned object in ax.hist2d.
         for making colorbar later.
@@ -85,7 +87,46 @@ def plot_r_err_vs_r2(data, true, ax, max_r,vmax = None):
 
     return h[3]
 
-def plot_hitpattern(data, true, ax, max_r,vmax = None):
+
+def _bin_by_area(upper, lower, s2_size):
+    '''
+    Select hit patterns with area between upper and lower boundry of a bin.
+    '''
+    size_cut = (s2_size > lower) & (s2_size < upper)
+        
+    return size_cut
+
+
+def quantile_by_area(data, true, area, bins, ax, quantile = 0.393):
+    '''
+    Compute and plot the quantile for absolute error in each area bin
+
+    parameters:
+    data: array of (n,2)
+        (x,y) coordinate of reconstructed position
+    true: array of (n,2)
+        (x,y) coordinate of true position
+    area: array of (n,)
+        (top) area of the hitpattern
+    bins: 1d array 
+        boundry of area bins
+    ax: matplotlib axis
+        the axis to plot
+    quantile: float (default 0.393)
+        quantile of absolute error to compute
+        0.393 corresponding to 1 sigma of 2d gaussian distribution
+
+    return: 1d array
+        computed quantile of each bin
+    '''
+
+    absolute_error = np.sqrt((data[:,0] - true[:,0]) ** 2 + (data[:,1] - true[:,1]) ** 2)
+
+
+    return 0
+
+
+def plot_hitpattern(data, true, ax, max_r, vmax = None):
     '''
     Plot top hit pattern and mark the true and reconstructed position
 
@@ -98,6 +139,7 @@ def plot_hitpattern(data, true, ax, max_r,vmax = None):
         the axis to plot
     max_r: float
         the radius of detector
+
     return: image
         the 3rd returned object in ax.hist2d.
         for making colorbar later.
