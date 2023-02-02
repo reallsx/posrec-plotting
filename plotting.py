@@ -122,25 +122,13 @@ def quantile_by_area(data, true, area, bins, ax, quantile = 0.393):
 
     absolute_error = np.sqrt((data[:,0] - true[:,0]) ** 2 + (data[:,1] - true[:,1]) ** 2)
 
+    bin_quantile = np.zeros(len(bins)-1)
 
-    return 0
+    # bin by area and calculate quantile for each bin
+    for i in range(len(bins) - 1):
+        in_bin = (area > bins[i]) & (area < bins[i+1])
+        bin_quantile[i] = np.quantile(absolute_error[in_bin], q = quantile)
 
+    ax.step(bins[:-1], bin_quantile, alpha = 0.5,  where = "mid")
 
-def plot_hitpattern(data, true, ax, max_r, vmax = None):
-    '''
-    Plot top hit pattern and mark the true and reconstructed position
-
-    parameters:
-    data: array of (n,2)
-        (x,y) coordinate of reconstructed position
-    true: array of (n,2)
-        (x,y) coordinate of true position
-    ax: matplotlib axis
-        the axis to plot
-    max_r: float
-        the radius of detector
-
-    return: image
-        the 3rd returned object in ax.hist2d.
-        for making colorbar later.
-    '''
+    return bin_quantile
